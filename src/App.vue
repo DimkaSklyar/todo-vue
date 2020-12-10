@@ -3,7 +3,7 @@
     <div class="container-app">
       <aside class="sidebar">
         <List
-          :lists="allListTasks"
+          :lists="listAllTasks"
           :activeItem="activeItem"
           @on-click="handleActiveItem"
         />
@@ -12,6 +12,12 @@
           :activeItem="activeItem"
           @on-click="handleActiveItem"
         />
+        <List
+          :lists="listAddTask"
+          :activeItem="activeItem"
+          @on-click="showPopup"
+        />
+        <Popup v-if="isShowPopup" :lists="listColor" @add-list="handleAddList" />
       </aside>
       <div class="tasklist"></div>
     </div>
@@ -21,32 +27,44 @@
 <script>
 import axios from "axios";
 import List from "./components/List.vue";
-import menuImage from './assets/img/menu.png';
+import Popup from "./components/Popup.vue";
+import { LIST_ALL_TASKS, LIST_ADD_TASK } from "./const.js";
 
 export default {
   name: "App",
   data() {
     return {
       lists: [],
+      listColor: [],
       activeItem: null,
-      allListTasks: [{
-        name: 'Все задачи',
-        icon: menuImage
-      }]
+      listAllTasks: LIST_ALL_TASKS,
+      listAddTask: LIST_ADD_TASK,
+      isShowPopup: false,
     };
   },
   created() {
     axios
-      .get("http://localhost:3004/lists?_expand=color&_embed=tasks")
+      .get("/lists?_expand=color&_embed=tasks")
       .then((resp) => (this.lists = resp.data));
   },
+  mounted() {
+    axios.get("/colors").then((resp) => (this.listColor = resp.data));
+  },
   methods: {
-    handleActiveItem: function (id) {
+    handleActiveItem: function(id) {
       this.activeItem = id;
+    },
+    showPopup: function() {
+      this.isShowPopup = !this.isShowPopup;
+    },
+    handleAddList: function(listObj) {
+      this.isShowPopup = false;
+      this.lists.push(listObj);
     },
   },
   components: {
     List,
+    Popup,
   },
 };
 </script>
@@ -81,5 +99,20 @@ export default {
 
 .tasklist {
   background: #fff;
+}
+.hidden {
+  display: none;
+}
+.btn {
+  padding: 10px 0;
+  text-align: center;
+  background: #4dd599;
+  border-radius: 4px;
+  width: 100%;
+  outline: 0 none;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  color: #fff;
 }
 </style>

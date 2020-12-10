@@ -32,6 +32,7 @@ export default {
 <style lang="scss" scoped>
 .list {
   list-style: none;
+  margin-bottom: 20px;
 
   &__item {
     padding: 12px 10px;
