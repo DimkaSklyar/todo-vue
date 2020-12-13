@@ -16,24 +16,19 @@
       "colorId": 3
     },
     {
-      "id": 5,
-      "name": "Личное",
-      "colorId": 1
+      "name": "Дмитрий Скляр",
+      "colorId": 5,
+      "id": 4
     },
     {
-      "name": "dwadaw",
-      "colorId": 8,
+      "name": "432423423423",
+      "colorId": 7,
+      "id": 5
+    },
+    {
+      "name": "432432423",
+      "colorId": 6,
       "id": 6
-    },
-    {
-      "name": "dwadawdwa",
-      "colorId": 8,
-      "id": 7
-    },
-    {
-      "name": "ewqewq",
-      "colorId": 2,
-      "id": 8
     }
   ],
   "tasks": [

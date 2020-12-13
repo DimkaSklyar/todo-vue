@@ -20,13 +20,17 @@
           :class="{ active: color.id == selectColor }"
         ></li>
       </ul>
-      <button type="submit" class="btn">Добавить</button>
+      <button type="submit" class="btn btn-w-100">Добавить</button>
     </form>
+    <i class="btn_close">
+      <img :src="closeImage" alt="" @click="$emit('close-popup')" />
+    </i>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import closeImage from "../assets/img/close.png";
 
 export default {
   name: "Popup",
@@ -37,22 +41,22 @@ export default {
     return {
       selectColor: this.lists[0].id,
       nameList: "",
+      closeImage,
     };
-	},
+  },
   methods: {
-    addList: function() {
+    addList: function () {
       const obj = {
         name: this.nameList,
         colorId: this.selectColor,
       };
       axios.post("/lists", obj).then(({ data }) => {
         const color = this.lists.find((c) => c.id === this.selectColor);
-				const listObj = { ...data, color, tasks: [] };
-				this.$emit("add-list", listObj);
+        const listObj = { ...data, color, tasks: [] };
+        this.$emit("add-list", listObj);
       });
-      
     },
-    selectedColor: function(id) {
+    selectedColor: function (id) {
       this.selectColor = id;
     },
   },
@@ -95,6 +99,12 @@ export default {
         }
       }
     }
+  }
+  .btn_close {
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    cursor: pointer;
   }
 }
 </style>

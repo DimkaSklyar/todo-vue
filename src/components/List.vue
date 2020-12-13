@@ -20,7 +20,7 @@
       ></i>
       <i
         @click="removeItemList"
-        v-if="!!isDeletedItem"
+        v-if="!!isDeletedItem && activeItem === list.id"
         class="list__item__icon list__item__icon_img_right"
       >
         <img :src="iconDelete" alt="delete"
@@ -35,7 +35,7 @@
 
 <script>
 import deleteImage from "../assets/img/delete.png";
-import axios from 'axios';
+import axios from "axios";
 export default {
   name: "List",
   props: {
@@ -49,9 +49,16 @@ export default {
     };
   },
   methods: {
-    removeItemList: function() {
-      axios.delete(`/lists/${this.activeItem}`)
-    }
+    removeItemList: function () {
+      if (confirm("Вы действиетльно хотите удалить папку?")) {
+        axios
+          .delete(`/lists/${this.activeItem}`)
+          .then(() => {
+            this.$emit("delete-item", this.activeItem);
+          })
+          .catch(() => alert("Возникла ошибка при удаление"));
+      }
+    },
   },
 };
 </script>
