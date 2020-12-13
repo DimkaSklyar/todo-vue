@@ -10,14 +10,15 @@
         <List
           :lists="lists"
           :activeItem="activeItem"
+          :isDeletedItem="true"
           @on-click="handleActiveItem"
         />
-        <List
-          :lists="listAddTask"
-          :activeItem="activeItem"
-          @on-click="showPopup"
+        <List :lists="listAddTask" @on-click="showPopup" />
+        <Popup
+          v-if="isShowPopup"
+          :lists="listColor"
+          @add-list="handleAddList"
         />
-        <Popup v-if="isShowPopup" :lists="listColor" @add-list="handleAddList" />
       </aside>
       <div class="tasklist"></div>
     </div>

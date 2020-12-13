@@ -38,7 +38,7 @@ export default {
       selectColor: this.lists[0].id,
       nameList: "",
     };
-  },
+	},
   methods: {
     addList: function() {
       const obj = {
@@ -46,7 +46,7 @@ export default {
         colorId: this.selectColor,
       };
       axios.post("/lists", obj).then(({ data }) => {
-        const color = this.lists.filter((c) => c.id === this.selectColor);
+        const color = this.lists.find((c) => c.id === this.selectColor);
 				const listObj = { ...data, color, tasks: [] };
 				this.$emit("add-list", listObj);
       });
