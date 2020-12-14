@@ -43,11 +43,11 @@ export default {
   },
   updated() {
     if (this.$refs.inputForm) {
-      this.$refs.inputForm.focus()
+      this.$refs.inputForm.focus();
     }
   },
   methods: {
-    handleAddTask: function() {
+    handleAddTask: function () {
       const newTask = {
         listId: this.listTasks.id,
         text: this.textTask,
@@ -61,10 +61,9 @@ export default {
         })
         .catch(() => alert("Ошибка добавления новой задачи :("));
     },
-    onVisibleForm: function() {
+    onVisibleForm: function () {
       this.toggleVisible = !this.toggleVisible;
       this.textTask = "";
-      
     },
   },
 };
