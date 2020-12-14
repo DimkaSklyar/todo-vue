@@ -7,7 +7,7 @@
         'list__item',
         {
           active: list.id
-            ? activeItem === list.id
+            ? activeItem === list
             : activeItem === null && true,
         },
       ]"
@@ -20,7 +20,7 @@
       ></i>
       <i
         @click="removeItemList"
-        v-if="!!isDeletedItem && activeItem === list.id"
+        v-if="isDeletedItem"
         class="list__item__icon list__item__icon_img_right"
       >
         <img :src="iconDelete" alt="delete"
@@ -28,7 +28,7 @@
       <i v-else class="list__item__icon list__item__icon_img_left">
         <img :src="list.icon" alt="" />
       </i>
-      {{ list.name }}
+      <span class="list__item__text">{{ list.name }}</span>
     </li>
   </ul>
 </template>
@@ -40,7 +40,7 @@ export default {
   name: "List",
   props: {
     lists: Array,
-    activeItem: Number || null,
+    activeItem: Object || null,
     isDeletedItem: Boolean,
   },
   data() {
@@ -52,9 +52,9 @@ export default {
     removeItemList: function () {
       if (confirm("Вы действиетльно хотите удалить папку?")) {
         axios
-          .delete(`/lists/${this.activeItem}`)
+          .delete(`/lists/${this.activeItem.id}`)
           .then(() => {
-            this.$emit("delete-item", this.activeItem);
+            this.$emit("delete-item", this.activeItem.id);
           })
           .catch(() => alert("Возникла ошибка при удаление"));
       }
@@ -74,7 +74,18 @@ export default {
     cursor: pointer;
     border-radius: 4px;
     position: relative;
-
+    transition: .15s;
+    overflow: hidden;
+    &__text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: block;
+      padding-right: 15px;
+    }
+    &:hover {
+      background: rgba(255, 255, 255, 0.582);
+    }
     &.active {
       background: #fff;
     }

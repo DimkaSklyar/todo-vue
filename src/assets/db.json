@@ -1,54 +1,39 @@
 {
   "lists": [
     {
-      "id": 1,
-      "name": "Продажи",
-      "colorId": 5
+      "name": "Новая папка",
+      "colorId": 1,
+      "id": 1
     },
     {
-      "id": 2,
-      "name": "Фронтенд",
-      "colorId": 4
+      "name": "Новая папка 2",
+      "colorId": 1,
+      "id": 2
     },
     {
-      "id": 3,
-      "name": "Фильмы",
-      "colorId": 3
-    },
-    {
-      "name": "Дмитрий Скляр",
-      "colorId": 5,
-      "id": 4
-    },
-    {
-      "name": "432423423423",
-      "colorId": 7,
-      "id": 5
-    },
-    {
-      "name": "432432423",
-      "colorId": 6,
-      "id": 6
+      "name": "rewrewrewrewrewrewrwerewrwerewr",
+      "colorId": 1,
+      "id": 3
     }
   ],
   "tasks": [
     {
-      "id": 2,
-      "listId": 2,
-      "text": "Изучить паттерны проектирования",
-      "completed": true
+      "listId": 1,
+      "text": "Новая задача",
+      "completed": true,
+      "id": 1
     },
     {
-      "id": 3,
-      "listId": 2,
-      "text": "ReactJS Hooks (useState, useReducer, useEffect и т.д.)",
-      "completed": false
+      "listId": 1,
+      "text": "4324324324",
+      "completed": false,
+      "id": 2
     },
     {
-      "id": 4,
-      "listId": 2,
-      "text": "Redux (redux-observable, redux-saga)",
-      "completed": false
+      "listId": 1,
+      "text": "432432",
+      "completed": false,
+      "id": 3
     }
   ],
   "colors": [

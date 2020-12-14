@@ -2,18 +2,20 @@
   <div id="app">
     <div class="container-app">
       <aside class="sidebar">
-        <List
-          :lists="listAllTasks"
-          :activeItem="activeItem"
-          @on-click="handleActiveItem"
-        />
-        <List
-          :lists="lists"
-          :activeItem="activeItem"
-          :isDeletedItem="true"
-          @on-click="handleActiveItem"
-          @delete-item="handleDeleteItem"
-        />
+        <template v-if="lists.length">
+          <List
+            :lists="listAllTasks"
+            :activeItem="activeItem"
+            @on-click="handleActiveItem"
+          />
+          <List
+            :lists="lists"
+            :activeItem="activeItem"
+            :isDeletedItem="true"
+            @on-click="handleActiveItem"
+            @delete-item="handleDeleteItem"
+          />
+        </template>
         <List :lists="listAddTask" @on-click="toggleShowPopup" />
         <Popup
           v-if="isShowPopup"
@@ -23,12 +25,15 @@
         />
       </aside>
       <div class="tasklist">
-        <TaskList
-          v-for="(taks, index) in tasks"
-          :key="index"
-          :listTasks="taks"
-          @add-task="handleAddTask"
-        />
+        <template v-if="lists.length && activeItem">
+          <TaskList :listTasks="activeItem" @add-task="handleAddTask" />
+        </template>
+        <template v-else-if="lists.length">
+          <div v-for="(tasks, i) in lists" :key="i">
+            <TaskList :listTasks="tasks" @add-task="handleAddTask" />
+          </div>
+        </template>
+        <h1 v-else class="empty-header">Задачи отсутствуют</h1>
       </div>
     </div>
   </div>
@@ -47,7 +52,6 @@ export default {
     return {
       lists: [],
       listColor: [],
-      tasks: [],
       activeItem: null,
       listAllTasks: LIST_ALL_TASKS,
       listAddTask: LIST_ADD_TASK,
@@ -57,33 +61,36 @@ export default {
   created() {
     axios.get("/lists?_expand=color&_embed=tasks").then((resp) => {
       this.lists = resp.data;
-      this.tasks = resp.data;
     });
   },
   mounted() {
     axios.get("/colors").then((resp) => (this.listColor = resp.data));
   },
   methods: {
-    handleActiveItem: function (id) {
-      this.activeItem = id;
-
-      this.tasks = this.activeItem
-        ? this.lists.filter((item) => item.id === id)
-        : this.lists;
+    handleActiveItem: function(id) {
+      this.activeItem = this.lists.find((list) => list.id === id);
     },
-    toggleShowPopup: function () {
+    toggleShowPopup: function() {
       this.isShowPopup = !this.isShowPopup;
     },
-    handleAddList: function (listObj) {
+    handleAddList: function(listObj) {
       this.isShowPopup = false;
       this.lists.push(listObj);
     },
-    handleDeleteItem: function (id) {
-      const newLIst = this.lists.filter((item) => item.id !== id);
-      this.lists = newLIst;
+    handleDeleteItem: function(id) {
+      const newList = this.lists.filter((item) => item.id !== id);
+      if (newList.length === 0) {
+        this.activeItem = null;
+      }
+      this.lists = newList;
     },
-    handleAddTask: function () {
-      console.log(1);
+    handleAddTask: function(id, obj) {
+      this.lists.find((list) => list.id === id).tasks.push(obj);
+    },
+    handleCoplitedTask: function(task) {
+      axios
+        .patch(`/tasks/${task.id}`, { completed: !task.completed })
+        .catch(() => alert("Ошибка обновления задачи :("));
     },
   },
   components: {
@@ -108,6 +115,19 @@ export default {
   justify-content: center;
   min-height: 100vh;
 }
+.empty-header {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 32px;
+  line-height: 39px;
+  color: #c9d1d3;
+  white-space: nowrap;
+}
 .container-app {
   display: flex;
   width: 750px;
@@ -129,6 +149,7 @@ export default {
   padding: 55px;
   overflow: auto;
   flex: 1;
+  position: relative;
 }
 .hidden {
   display: none;
@@ -149,6 +170,12 @@ export default {
   &_cancel {
     background: #f4f6f8;
     color: #9c9c9c;
+  }
+  &_close {
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    cursor: pointer;
   }
 }
 fieldset {

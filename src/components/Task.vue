@@ -6,12 +6,18 @@
       :id="Itemtask.id"
       :checked="Itemtask.completed"
     />
-    <label :for="Itemtask.id"><img :src="completeImage" alt="" /></label>
+    <label :for="Itemtask.id" @click="onComplited"
+      ><img :src="completeImage" alt=""
+    /></label>
     <p :class="{ completed: Itemtask.completed }">{{ Itemtask.text }}</p>
+    <i @click="$emit('on-delete', Itemtask.id)"
+      ><img :src="deleteImage" alt=""
+    /></i>
   </li>
 </template>
 <script>
 import completeImage from "../assets/img/complete.png";
+import deleteImage from "../assets/img/delete.png";
 export default {
   name: "Task",
   props: {
@@ -20,7 +26,13 @@ export default {
   data() {
     return {
       completeImage,
+      deleteImage,
     };
+  },
+  methods: {
+    onComplited: function() {
+      this.$root.$children[0].handleCoplitedTask(this.Itemtask);
+    },
   },
 };
 </script>
@@ -28,6 +40,22 @@ export default {
 .task__item {
   display: flex;
   margin-bottom: 20px;
+  position: relative;
+  &:hover i {
+    opacity: 1;
+  }
+  i {
+    position: absolute;
+    opacity: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    transition: 0.15s;
+    &:hover {
+      transform: translateY(-50%) scale(1.2);
+    }
+  }
   label {
     width: 20px;
     height: 20px;

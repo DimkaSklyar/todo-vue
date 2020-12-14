@@ -2,6 +2,7 @@
   <div class="popup">
     <form class="form-add-task" @submit.prevent="addList">
       <input
+        ref="inputForm"
         v-model="nameList"
         class="input-form"
         type="text"
@@ -44,8 +45,13 @@ export default {
       closeImage,
     };
   },
+  mounted() {
+    if (this.$refs.inputForm) {
+      this.$refs.inputForm.focus();
+    }
+  },
   methods: {
-    addList: function () {
+    addList: function() {
       const obj = {
         name: this.nameList,
         colorId: this.selectColor,
@@ -56,7 +62,7 @@ export default {
         this.$emit("add-list", listObj);
       });
     },
-    selectedColor: function (id) {
+    selectedColor: function(id) {
       this.selectColor = id;
     },
   },
@@ -71,6 +77,7 @@ export default {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   padding: 18px;
   position: absolute;
+  z-index: 999;
   .form-add-task {
     .input-form {
       background: #ffffff;
@@ -99,12 +106,6 @@ export default {
         }
       }
     }
-  }
-  .btn_close {
-    position: absolute;
-    right: -10px;
-    top: -10px;
-    cursor: pointer;
   }
 }
 </style>

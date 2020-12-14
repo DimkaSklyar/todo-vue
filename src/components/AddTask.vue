@@ -6,11 +6,12 @@
       @submit.prevent="handleAddTask"
     >
       <input
+        ref="inputForm"
         class="input-form"
         type="text"
         required
         placeholder="Текст задачи"
-        v-model="newTask"
+        v-model="textTask"
       />
       <fieldset class="add-task__btn_wrap">
         <button type="submit" class="btn">Добавить задачу</button>
@@ -27,6 +28,7 @@
 </template>
 <script>
 import addImage from "../assets/img/add.png";
+import axios from "axios";
 export default {
   name: "AddTask",
   props: {
@@ -36,16 +38,33 @@ export default {
     return {
       addImage,
       toggleVisible: false,
-      newTask: "",
+      textTask: "",
     };
   },
+  updated() {
+    if (this.$refs.inputForm) {
+      this.$refs.inputForm.focus()
+    }
+  },
   methods: {
-    handleAddTask: function () {
-      //TODO
-      console.log(this.$root.$children.handleAddTask);
+    handleAddTask: function() {
+      const newTask = {
+        listId: this.listTasks.id,
+        text: this.textTask,
+        completed: false,
+      };
+      axios
+        .post(`/tasks/`, newTask)
+        .then(({ data }) => {
+          this.$root.$children[0].handleAddTask(this.listTasks.id, data);
+          this.onVisibleForm();
+        })
+        .catch(() => alert("Ошибка добавления новой задачи :("));
     },
-    onVisibleForm: function () {
+    onVisibleForm: function() {
       this.toggleVisible = !this.toggleVisible;
+      this.textTask = "";
+      
     },
   },
 };
