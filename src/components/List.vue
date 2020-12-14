@@ -6,9 +6,7 @@
       :class="[
         'list__item',
         {
-          active: list.id
-            ? activeItem === list
-            : activeItem === null && true,
+          active: list.id ? activeItem === list : activeItem === null && true,
         },
       ]"
       @click="$emit('on-click', list.id)"
@@ -74,7 +72,7 @@ export default {
     cursor: pointer;
     border-radius: 4px;
     position: relative;
-    transition: .15s;
+    transition: 0.15s;
     overflow: hidden;
     &__text {
       overflow: hidden;
