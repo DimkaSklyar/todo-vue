@@ -77,10 +77,12 @@ export default {
       this.isShowPopup = false;
       this.lists.push(listObj);
     },
-    handleDeleteItem: function(id) {
+    handleDeleteItem: function(id, index) {
       const newList = this.lists.filter((item) => item.id !== id);
-      if (newList.length === 0) {
+      if (newList.length === 0 || index === 0) {
         this.activeItem = null;
+      } else {
+        this.activeItem = this.lists[index - 1];
       }
       this.lists = newList;
     },

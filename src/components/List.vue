@@ -1,14 +1,12 @@
 <template>
   <ul class="list">
     <li
-      v-for="list in lists"
+      v-for="(list, index) in lists"
       :key="list.id"
       :class="[
         'list__item',
         {
-          active: list.id
-            ? activeItem === list
-            : activeItem === null && true,
+          active: list.id ? activeItem === list : activeItem === null && true,
         },
       ]"
       @click="$emit('on-click', list.id)"
@@ -19,7 +17,7 @@
         :style="{ background: list.color.hex }"
       ></i>
       <i
-        @click="removeItemList"
+        @click="removeItemList(index)"
         v-if="isDeletedItem"
         class="list__item__icon list__item__icon_img_right"
       >
@@ -49,12 +47,12 @@ export default {
     };
   },
   methods: {
-    removeItemList: function () {
+    removeItemList: function(index) {
       if (confirm("Вы действиетльно хотите удалить папку?")) {
         axios
           .delete(`/lists/${this.activeItem.id}`)
           .then(() => {
-            this.$emit("delete-item", this.activeItem.id);
+            this.$emit("delete-item", this.activeItem.id, index);
           })
           .catch(() => alert("Возникла ошибка при удаление"));
       }
@@ -74,7 +72,7 @@ export default {
     cursor: pointer;
     border-radius: 4px;
     position: relative;
-    transition: .15s;
+    transition: 0.15s;
     overflow: hidden;
     &__text {
       overflow: hidden;
